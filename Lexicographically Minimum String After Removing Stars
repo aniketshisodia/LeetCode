@@ -1,0 +1,32 @@
+// jai shree ram
+class Solution {
+public:
+    string clearStars(string s) {
+        // Custom comparator: smaller char first, among same char, larger index first
+        auto cmp = [](const pair<int, int>& a, const pair<int, int>& b) {
+            if (a.first != b.first) return a.first < b.first;
+            return a.second > b.second;
+        };
+
+        set<pair<int, int>, decltype(cmp)> st(cmp);
+
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] != '*') {
+                st.insert({s[i] - 'a', i});
+            } else {
+                if (!st.empty()) {
+                    auto it = st.begin();  // smallest char with largest index
+                    st.erase(it);
+                }
+            }
+        }
+
+        string ans;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] != '*' && st.count({s[i] - 'a', i})) {
+                ans.push_back(s[i]);
+            }
+        }
+        return ans;
+    }
+};
